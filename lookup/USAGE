@@ -1,0 +1,7 @@
+Description:
+	Creates a migration, model, unit test and seed data for a lookup table.
+	
+	Seed values can be passed in as well.
+	
+Examples:
+	./script/generate Status Open:n Closed:n
