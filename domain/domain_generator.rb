@@ -37,9 +37,8 @@ class DomainGenerator < Rails::Generator::NamedBase
         end
 
         unless options[:skip_migration]
-          domain.to_hash.merge(:migration_name => "Create#{migration_name.gsub(/::/, '')}")
-          m.migration_template 'migration.rb', 'db/migrate', 
-            :assigns => domain.to_hash, :migration_file_name => "create_#{migration_file_path}"
+          locals = domain.to_hash.merge(:migration_name => "Create#{migration_name.gsub(/::/, '')}")
+          m.migration_template 'migration.rb', 'db/migrate', :assigns => locals, :migration_file_name => "create_#{migration_file_path}"
         end
       end
     end
