@@ -1,8 +1,9 @@
 require "#{File.dirname(__FILE__)}/rails-ext/generated_attribute_extended"
 
-module DomainGenerator
+module MyDomainGenerator
   class Table
-    attr_reader :name, :description, :class_name, :file_name, :migration_file_name, :fields, :indexed_fields, :references
+    attr_reader :name,   :description,    :class_name,    :file_name,       :migration_file_name, 
+                :fields, :indexed_fields, :unique_fields, :required_fields, :references
     
     # Creates a new +Table+ object.
     #
@@ -20,7 +21,22 @@ module DomainGenerator
       extract_fields!
       
       @indexed_fields      = @fields.reject { |f| !f.indexed }
+      @unique_fields       = @fields.reject { |f| f.unique }
+      @required_fields     = @fields.reject { |f| f.column.null }
     end
+
+#    def to_hash
+#      returning Hash.new do |h|
+#        h[:description]         = description
+#        h[:class_name]          = class_name
+#        h[:file_name]           = file_name
+#        h[:fields]              = fields
+#        h[:indexed_fields]      = indexed_fields
+#        h[:migration_file_name] = migration_file_name
+#        h[:table_name]          = name
+#        h[:references]          = @references
+#      end
+#    end
     
 #    def belongs_to_references
 #      @references.map { |r| ":#{r}"}.join(', ')
@@ -53,7 +69,7 @@ module DomainGenerator
           e.elements["unique"] && e.elements["unique"].text == '1' ? unique = false : unique = true
 
           # Relationships       
-          @references[:belongs_to] << e.elements["referencesTable"].text.pluralize.underscore.to_sym if e.elements["referencesTable"]
+          @references[:belongs_to] << e.elements["referencesTable"].text.underscore.to_sym if e.elements["referencesTable"]
 
           @fields << Rails::Generator::GeneratedAttributeExtended.new(name, type, default, nullable, indexed, unique)
         end

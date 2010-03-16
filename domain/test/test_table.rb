@@ -11,8 +11,8 @@ require "rexml/document"
 class TestTable < Test::Unit::TestCase
   def setup
     doc = REXML::Document.new(File.open(File.dirname(__FILE__) + '/example.sqs'))
-    @users_table = DomainGenerator::Table.new(doc.root.elements["SQLTable[name='Users']"])
-    @posts_table = DomainGenerator::Table.new(doc.root.elements["SQLTable[name='Posts']"])
+    @users_table = MyDomainGenerator::Table.new(doc.root.elements["SQLTable[name='Users']"])
+    @posts_table = MyDomainGenerator::Table.new(doc.root.elements["SQLTable[name='Posts']"])
   end
   
   def test_can_initialize
@@ -44,8 +44,18 @@ class TestTable < Test::Unit::TestCase
     assert_equal 1, @posts_table.indexed_fields.size
   end
   
+  def test_can_get_unique_fields
+    assert_equal 1, @posts_table.unique_fields.size
+    assert_equal 'title', @posts_table.unique_fields[0].column.name
+  end
+  
+  def test_can_get_required_fields
+    assert_equal 2, @posts_table.required_fields.size
+    assert_equal ['title', 'user_id'], @posts_table.required_fields.map { |f| f.column.name }
+  end
+  
   def test_can_get_belongs_to_references
     assert_equal [:users], @posts_table.references[:belongs_to]
     assert_equal [], @users_table.references[:belongs_to]
-  end  
+  end
 end
