@@ -1,7 +1,7 @@
 class <%= migration_name %> < ActiveRecord::Migration
   def self.up
-    create_table :<%= table_name.downcase %> do |t|
-<% for field in fields -%>
+    create_table :<%= table.name.underscore %> do |t|
+<% for field in table.fields -%>
       <%= field.to_migration('t') %>
 <% end -%>
 <% unless options[:skip_timestamps] %>
@@ -9,15 +9,15 @@ class <%= migration_name %> < ActiveRecord::Migration
 <% end -%>
     end
 
-<% for field in indexed_fields -%>
-    add_index :<%= table_name.downcase %>, :<%= field.column.name %>
+<% for field in table.indexed_fields -%>
+    add_index :<%= table.name.underscore %>, :<%= field.column.name %>
 <% end -%>
   end
 
   def self.down
-<% for field in indexed_fields.reverse -%>
-    remove_index :<%= table_name.downcase %>, :<%= field.column.name %>
+<% for field in table.indexed_fields.reverse -%>
+    remove_index :<%= table.name.underscore %>, :<%= field.column.name %>
 <% end -%>
-    drop_table :<%= table_name.downcase %>
+    drop_table :<%= table.name.underscore %>
   end
 end

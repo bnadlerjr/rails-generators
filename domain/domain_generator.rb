@@ -8,8 +8,7 @@ class DomainGenerator < Rails::Generator::Base
     record do |m|
       # Create directories.
       m.directory 'app/models'
-#      m.directory File.join('app/models', class_path)
-#      m.directory File.join('test/unit', class_path)
+      m.directory 'test/unit'
 
       # Load SQL specification
       doc = REXML::Document.new(File.open(args.shift))
@@ -23,9 +22,21 @@ class DomainGenerator < Rails::Generator::Base
 
         # Apply templates
         m.template 'model.rb', File.join('app/models', "#{table.file_name}.rb"), :assigns => { :table => table }
-        
-#        m.template 'model.rb', File.join('app/models', class_path, "#{table.file_name}.rb"), :assigns => table
-#        m.template 'unit_test.rb',  File.join('test/unit', class_path, "#{domain.file_name}_test.rb"), :assigns => domain.to_hash
+        m.template 'unit_test.rb',  File.join('test/unit', "#{table.file_name}_test.rb"), :assigns => { :table => table }
+
+        # Migration
+        migration_file_path = table.migration_file_name
+        migration_name = table.class_name
+        if ActiveRecord::Base.pluralize_table_names
+          migration_name = migration_name.pluralize
+          migration_file_path = migration_file_path.pluralize
+        end
+
+        unless options[:skip_migration]
+          locals = { :table => table, :migration_name => "Create#{migration_name.gsub(/::/, '')}" }
+#          locals = domain.to_hash.merge(:migration_name => "Create#{migration_name.gsub(/::/, '')}")
+          m.migration_template 'migration.rb', 'db/migrate', :assigns => locals, :migration_file_name => "create_#{migration_file_path}"
+        end
       end
       
 #      tables = get_table_names(doc, ARGV)
