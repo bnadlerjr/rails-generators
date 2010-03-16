@@ -12,11 +12,6 @@ module Rails
         @indexed, @unique = indexed, unique
       end
       
-      # Converts attribute fields into a readable string.
-      def to_s
-        "Name:    #{column.name}\n\tType:    #{column.type}\n\tDefault: #{column.default}\n\tIndexed: #{indexed}\n\tUnique:  #{unique}\n"
-      end
-      
       # Converts field into a migration declaration like:
       # t.string :name, :null => false, :default => 'Untitled'
       # +obj+ is the name of the owner ('t' in the above example).

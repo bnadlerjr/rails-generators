@@ -7,7 +7,7 @@ require 'rails_generator/scripts/generate'
 require 'activerecord'
 
 class TestDomainGenerator < Test::Unit::TestCase
-  DELETE_TMP_APP = false # Set to false when debugging generated files
+  DELETE_TMP_APP = true # Set to false when debugging generated files to keep them around
   SAMPLES_ROOT = File.join(File.dirname(__FILE__), '/samples')
   
   def setup

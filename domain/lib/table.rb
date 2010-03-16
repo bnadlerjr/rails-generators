@@ -24,31 +24,6 @@ module MyDomainGenerator
       @unique_fields       = @fields.reject { |f| f.unique }
       @required_fields     = @fields.reject { |f| f.column.null }
     end
-
-#    def to_hash
-#      returning Hash.new do |h|
-#        h[:description]         = description
-#        h[:class_name]          = class_name
-#        h[:file_name]           = file_name
-#        h[:fields]              = fields
-#        h[:indexed_fields]      = indexed_fields
-#        h[:migration_file_name] = migration_file_name
-#        h[:table_name]          = name
-#        h[:references]          = @references
-#      end
-#    end
-    
-#    def belongs_to_references
-#      @references.map { |r| ":#{r}"}.join(', ')
-#    end
-#
-#    def add_has_many_reference(table_name)
-#      @has_many_references << table_name.to_sym
-#    end
-#    
-#    def has_many_references
-#      @has_many_references.join(', ')
-#    end
     
     private
     
