@@ -15,7 +15,7 @@ class DomainGenerator < Rails::Generator::Base
 
       # Load SQL specification
       doc = REXML::Document.new(File.open(args.shift))
-      domain = MyDomainGenerator::Domain.new(doc)
+      domain = MyDomainGenerator::Domain.new(doc, args)
       
       # Generate files for each table
       domain.tables.values.each do |table|
@@ -45,15 +45,15 @@ class DomainGenerator < Rails::Generator::Base
 
   protected
     def banner
-      "Usage: #{$0} #{spec.name} InputFile [Models]"
+      "Usage: #{$0} #{spec.name} inputfile [tables]"
     end
 
     def add_options!(opt)
       opt.separator ''
       opt.separator 'Options:'
       opt.on("--skip-timestamps",
-             "Don't add timestamps to the migration file for this model") { |v| options[:skip_timestamps] = v }
+             "Don't add timestamps to the migration file(s)") { |v| options[:skip_timestamps] = v }
       opt.on("--skip-migration", 
-             "Don't generate a migration file for this model") { |v| options[:skip_migration] = v }
+             "Don't generate a migration file(s)") { |v| options[:skip_migration] = v }
     end
 end
