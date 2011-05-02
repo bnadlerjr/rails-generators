@@ -1,3 +1,8 @@
+===*** ATTENTION ***
+The generators in this repo are not Rails 3 compatible and are no longer
+being maintained. See https://github.com/bnadlerjr/third_switch_generators for
+the new Rails 3 compatible versions.
+
 Various Rails generators.
 
 1) Lookup: Generates lookup tables / models.
